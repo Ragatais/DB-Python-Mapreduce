@@ -2,6 +2,7 @@ import csv
 import os
 import time
 from collections import defaultdict
+from functools import reduce
 
 base_dir = os.path.dirname(__file__)  # folder, w którym jest ten skrypt
 csv_path = os.path.join(base_dir, "data", "netflix_titles.csv")
@@ -11,14 +12,19 @@ output_path = os.path.join(base_dir, "data", "python_output.csv")  # plik wyjśc
 start_time = time.time()
 
 # Wczytaj dane i wykonaj map + reduce
-year_count = defaultdict(int)
-
 with open(csv_path, encoding="utf-8") as f:
     reader = csv.DictReader(f)
-    for row in reader:
-        if row["type"] == "Movie":
-            year = row["release_year"]
-            year_count[year] += 1
+    movies = filter(lambda row: row["type"] == "Movie", reader)
+
+    # map: wydobywamy tylko rok
+    movie_years = map(lambda row: row["release_year"], movies)
+
+    # reduce: zliczamy wystąpienia lat
+    def count_years(acc, year):
+        acc[year] += 1
+        return acc
+
+    year_count = reduce(count_years, movie_years, defaultdict(int))
 
 
 # Posortowane wyniki

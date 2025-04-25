@@ -18,7 +18,7 @@ df = spark.read.option("header", True).csv(file_path)
 
 # Konwersja kolumny release_year na integer i filtrowanie nieprawidłowych wartości
 df_clean = df.withColumn("release_year", col("release_year").cast("int")) \
-             .filter(col("release_year").isNotNull())
+             .filter((col("release_year").isNotNull()) & (col("type") == "Movie"))
 
 # Agregacja: liczba filmów na każdy rok
 df_result = df_clean.groupBy("release_year").agg(count("*").alias("count")).orderBy("release_year")
