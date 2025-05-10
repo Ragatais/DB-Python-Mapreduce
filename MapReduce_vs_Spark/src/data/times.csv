@@ -1,3 +1,7 @@
 MapReduce,0.0517
 PySpark,5.3353
+DestCountryMapReduce,3.8418
+PySpark_DestCountry,6.4070
+MapReduce_tx_idx_chunks_with_reduce,16.6380
+PySpark_TxIdx_MultiFile,9.3102
 
